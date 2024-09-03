@@ -15,7 +15,16 @@ on:
       event_name:
         required: true
         type: string
-  
+      actions_runs_on:
+        required: true
+        type: string
+      actions_packager_image:
+        required: true
+        type: string
+      build_predenpendency_command:
+        required: true
+        type: string
+
 jobs:
   build:
     if: ${{ inputs.event_name == 'java-pipeline-scan' || inputs.event_name == 'java-policy-scan' || inputs.event_name == 'java-sandbox-scan' || inputs.event_name == 'unidentified-lang-pipeline-scan' || inputs.event_name == 'unidentified-lang-policy-scan' || inputs.event_name == 'unidentified-lang-sandbox-scan' || inputs.event_name == 'dot-net-pipeline-scan' || inputs.event_name == 'dot-net-policy-scan' || inputs.event_name == 'dot-net-sandbox-scan' || inputs.event_name == 'scala-pipeline-scan' || inputs.event_name == 'scala-policy-scan'  || inputs.event_name == 'scala-sandbox-scan' || inputs.event_name == 'go-pipeline-scan' || inputs.event_name == 'go-policy-scan'  || inputs.event_name == 'go-sandbox-scan' || inputs.event_name == 'source-code-pipeline-scan' || inputs.event_name == 'source-code-policy-scan' || inputs.event_name == 'source-code-sandbox-scan'}}
@@ -24,6 +33,9 @@ jobs:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       token: ${{ inputs.token }}
+      actions_runs_on: ${{ inputs.actions_runs_on }}
+      actions_packager_image: ${{ inputs.actions_packager_image }}
+      build_predenpendency_command: ${{ inputs.build_predenpendency_command }}
 
   build-tsql-package:
     if: ${{ inputs.event_name == 'tsql-pipeline-scan' || inputs.event_name == 'tsql-policy-scan'  || inputs.event_name == 'tsql-sandbox-scan'}}

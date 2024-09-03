@@ -86,6 +86,9 @@ jobs:
       ref: ${{ github.event.client_payload.sha }}
       token: ${{ github.event.client_payload.token }}
       event_name: ${{ github.event.action }}
+      actions_runs_on: ${{ github.event.client_payload.user_config.actions_runs_on }}
+      actions_packager_image: ${{ github.event.client_payload.user_config.actions_packager_image }}
+      build_predenpendency_command: ${{ github.event.client_payload.user_config.build_predenpendency_command }}
 
 
   pipeline_scan:

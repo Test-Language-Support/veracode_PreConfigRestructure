@@ -11,6 +11,16 @@ on:
       token:
         required: true
         type: string
+      actions_runs_on:
+        required: true
+        type: string
+      actions_packager_image:
+        required: true
+        type: string
+      build_predenpendency_command:
+        required: true
+        type: string
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,21 +40,27 @@ jobs:
       with:
         path: 'veracode-helper'
 
+    - name: Fetch Dependencies
+      id: fetch_dependencies
+      run: |
+        ${{ inputs.build_predenpendency_command }}
+x
     - name: Package the application
       id: application_package
       env:
         VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
         VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
       run: |
+        working_path=`pwd`
+        echo "working_dir=$working_path" >> "$GITHUB_OUTPUT"
         cd veracode-helper/helper/cli
         cliFile=$(ls -1 . | head -n 1)
         cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
         tar -zxvf $cliFile
         cd $cliFileName
         export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
-        cd /__w/veracode/veracode
+        cd $working_path
         veracode package --source . --output veracode-artifacts --trust
-        zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
 
     - name: Package error
       if: failure() && steps.application_package.outcome == 'failure'
@@ -54,5 +70,5 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: veracode-artifact
-        path: /__w/veracode/veracode/veracode-artifacts/*
+        path: "${{ steps.application_package.outputs.working_dir }}/veracode-artifacts/*"
         if-no-files-found: error
