@@ -24,6 +24,12 @@ on:
       build_predenpendency_command:
         required: true
         type: string
+      ruby_version:
+        required: true
+        type: string
+      bundle_version:
+        required: true
+        type: string
 
 jobs:
   build:
@@ -68,3 +74,16 @@ jobs:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}
       token: ${{ inputs.token }}
+
+  build-ruby-package:
+    if: ${{ inputs.event_name == 'ruby-pipeline-scan' || inputs.event_name == 'ruby-policy-scan' || inputs.event_name == 'ruby-sandbox-scan' }}
+    uses: ./.github/workflows/veracode-build-ruby.yml
+    with:
+      repository: ${{ inputs.repository }}
+      ref: ${{ inputs.ref }}
+      token: ${{ inputs.token }}
+      actions_runs_on: ${{ inputs.actions_runs_on }}
+      actions_packager_image: ${{ inputs.actions_packager_image }}
+      ruby_version: ${{ inputs.ruby_version }}
+      bundle_version: ${{ inputs.bundle_version }}
+      build_predenpendency_command: ${{ inputs.build_predenpendency_command }}
