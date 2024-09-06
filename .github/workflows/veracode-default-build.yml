@@ -44,7 +44,7 @@ jobs:
       id: fetch_dependencies
       run: |
         ${{ inputs.build_predenpendency_command }}
-x
+
     - name: Package the application
       id: application_package
       env:
