@@ -29,6 +29,8 @@ on:
       - java-policy-scan
       - unidentified-lang-pipeline-scan
       - unidentified-lang-policy-scan
+      - ruby-pipeline-scan
+      - ruby-policy-scan
 
 jobs:
   register:
@@ -89,6 +91,8 @@ jobs:
       actions_runs_on: ${{ github.event.client_payload.user_config.actions_runs_on }}
       actions_packager_image: ${{ github.event.client_payload.user_config.actions_packager_image }}
       build_predenpendency_command: ${{ github.event.client_payload.user_config.build_predenpendency_command }}
+      ruby_version: ${{ github.event.client_payload.user_config.ruby_version }}
+      bundle_version: ${{ github.event.client_payload.user_config.bundle_version }}
 
 
   pipeline_scan:
