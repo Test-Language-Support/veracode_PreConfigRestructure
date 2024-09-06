@@ -21,7 +21,7 @@ on:
       actions_packager_image:
         required: true
         type: string
-      build_predenpendency_command:
+      build_predependency_command:
         required: true
         type: string
       ruby_version:
@@ -41,7 +41,7 @@ jobs:
       token: ${{ inputs.token }}
       actions_runs_on: ${{ inputs.actions_runs_on }}
       actions_packager_image: ${{ inputs.actions_packager_image }}
-      build_predenpendency_command: ${{ inputs.build_predenpendency_command }}
+      build_predependency_command: ${{ inputs.build_predependency_command }}
 
   build-tsql-package:
     if: ${{ inputs.event_name == 'tsql-pipeline-scan' || inputs.event_name == 'tsql-policy-scan'  || inputs.event_name == 'tsql-sandbox-scan'}}
@@ -86,4 +86,4 @@ jobs:
       actions_packager_image: ${{ inputs.actions_packager_image }}
       ruby_version: ${{ inputs.ruby_version }}
       bundle_version: ${{ inputs.bundle_version }}
-      build_predenpendency_command: ${{ inputs.build_predenpendency_command }}
+      build_predependency_command: ${{ inputs.build_predependency_command }}

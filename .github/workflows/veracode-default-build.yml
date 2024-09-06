@@ -17,7 +17,7 @@ on:
       actions_packager_image:
         required: true
         type: string
-      build_predenpendency_command:
+      build_predependency_command:
         required: true
         type: string
 
@@ -43,7 +43,7 @@ jobs:
     - name: Fetch Dependencies
       id: fetch_dependencies
       run: |
-        ${{ inputs.build_predenpendency_command }}
+        ${{ inputs.build_predependency_command }}
 
     - name: Package the application
       id: application_package

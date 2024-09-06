@@ -18,7 +18,7 @@ on:
       actions_packager_image:
         required: true
         type: string
-      build_predenpendency_command:
+      build_predependency_command:
         required: true
         type: string
       ruby_version:
@@ -69,7 +69,7 @@ jobs:
         gem install bundler -v ${{ inputs.bundle_version }}
         gem install veracode
         bundle install
-        ${{ inputs.build_predenpendency_command }}
+        ${{ inputs.build_predependency_command }}
         
         veracode package --source . --output veracode-artifacts --trust
         zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
