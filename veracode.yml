@@ -1,3 +1,18 @@
+actions:
+  ruby:
+    version:
+    bundle:
+  veracode_static_scan:
+    build:
+      runs_on:
+      packager_image:
+      predependency_command: |
+  veracode_sca_scan:
+    build:
+      runs_on:
+      packager_image:
+      predependency_command: |
+
 veracode_static_scan:
   push:
     trigger: true
