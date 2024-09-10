@@ -11,21 +11,30 @@ on:
       token:
         required: true
         type: string
-      actions_runs_on:
+      event_name:
         required: true
         type: string
-      actions_packager_image:
+      build_runs_on:
+        required: true
+        type: string
+      build_packager_image:
         required: true
         type: string
       build_predependency_command:
         required: true
         type: string
+      ruby_version:
+        required: true
+        type: string
+      bundle_version:
+        required: true
+        type: string
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.build_runs_on }}
     container:
-      image: veracode/scm-packaging:2.1.0
+      image: ${{ inputs.build_packager_image }}
     env:
       VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
       VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
@@ -40,6 +49,17 @@ jobs:
       with:
         path: 'veracode-helper'
 
+    - name: Setup for Ruby
+      if: contains(${{ inputs.event_name }}, 'ruby')
+      id: ruby_setup
+      shell: bash
+      run: |
+        source /etc/profile.d/rvm.sh
+        rvm pkg install openssl
+        rvm install ruby-${{ inputs.ruby_version }}
+        gem install bundler -v ${{ inputs.bundle_version }}
+        gem install veracode
+
     - name: Fetch Dependencies
       id: fetch_dependencies
       run: |
@@ -47,10 +67,14 @@ jobs:
 
     - name: Package the application
       id: application_package
+      shell: bash
       env:
         VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
         VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
       run: |
+        if [[ "${{ inputs.event_name }}" == *"ruby"* ]]; then
+          bundle install
+        fi
         working_path=`pwd`
         echo "working_dir=$working_path" >> "$GITHUB_OUTPUT"
         cd veracode-helper/helper/cli
